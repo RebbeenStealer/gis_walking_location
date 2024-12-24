@@ -1,23 +1,18 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import userDao from '../dao/user.dao';
+
+const SECRET_KEY = process.env.SECRET_KEY || "default_secret_key"; // 기본값 설정 (개발용)
 
 const createUser = async (userData: any) => {
   try {
-    // 비밀번호 암호화
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
-
-    // 암호화된 정보 콘솔에 출력
-    console.log("암호화된 사용자 정보:");
-    console.log("해시된 비밀번호:", hashedPassword);
-
-    // DAO를 통해 데이터베이스에 저장
     const newUser = await userDao.createUser({
       ...userData,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
-    // 비밀번호 필드 제거 후 반환
     const { password, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
   } catch (error) {
@@ -26,6 +21,31 @@ const createUser = async (userData: any) => {
   }
 };
 
+const loginUser = async (userId: string, password: string) => {
+  try {
+    const user = await userDao.getUserById(userId);
+    
+    if (!user) {
+      throw new Error('사용자를 찾을 수 없습니다.');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    
+    if (!isPasswordValid) {
+      throw new Error('비밀번호가 올바르지 않습니다.');
+    }
+
+    const token = jwt.sign({ id: user.user_id }, SECRET_KEY, { expiresIn: '1h' });
+
+    const { password: _, ...userWithoutPassword } = user;
+    return { user: userWithoutPassword, token };
+  } catch (error) {
+    console.error("로그인 처리 중 오류:", error);
+    throw new Error("로그인 처리 중 오류 발생");
+  }
+};
+
 export default {
-  createUser
+  createUser,
+  loginUser,
 };

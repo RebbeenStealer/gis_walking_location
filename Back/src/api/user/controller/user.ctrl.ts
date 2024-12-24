@@ -15,6 +15,21 @@ const signup = async (req: Request, res: Response): Promise<void> => {
     }
   };
 
+  const login = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id, password } = req.body; // 클라이언트로부터 ID와 비밀번호 받기
+        console.log('로그인 요청 데이터:', { id });
+
+        const user = await userService.loginUser(id, password);
+        
+        res.status(200).json({ message: '로그인 성공', user });
+    } catch (error) {
+        console.error('로그인 오류:', error);
+        res.status(401).json({ message: error }); // 401 Unauthorized
+    }
+};
+
 export default {
   signup,
+  login,
 };

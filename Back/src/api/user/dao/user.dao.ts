@@ -26,6 +26,22 @@ const createUser = async (userData: IUser): Promise<IUser> => {
     }
 };
 
+const getUserById = async (userId: string) => {
+    const query = `
+        SELECT user_id, id, password, username, phone_number, created_at 
+        FROM team2."user" 
+        WHERE id = $1;
+    `;
+    try {
+        const result: QueryResult = await db.query(query, [userId]);
+        return result.rows[0]; // 사용자 정보 반환
+    } catch (error) {
+        console.error('Error in getUserById:', error);
+        throw new Error('데이터베이스 조회 오류');
+    }
+};
+
 export default {
     createUser,
+    getUserById
 };
