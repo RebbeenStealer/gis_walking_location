@@ -1,9 +1,9 @@
-// import express from 'express'
-// import ctrl from './controller/user.ctrl'
+import express from 'express'
+import ctrl from './controller/user.ctrl'
 
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.get('/signup', ctrl.)
+router.post('/signup', ctrl.signup)
 
-// export default router;
+export default router;

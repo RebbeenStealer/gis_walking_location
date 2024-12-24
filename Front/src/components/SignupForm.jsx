@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -64,7 +65,7 @@ if (name === "confirmPassword") {
   }
 };
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   // 최종 유효성 검사
@@ -83,10 +84,15 @@ const handleSubmit = (e) => {
     return;
   }
 
-    console.log("회원가입 데이터:", formData);
+  try {
+    const response = await axios.post('http://localhost:8080/user/signup', formData);
+    console.log("서버 응답:", response.data);
     alert("회원가입이 완료되었습니다!");
-  };
-
+  } catch (error) {
+    console.error("회원가입 오류:", error);
+    alert("회원가입 중 오류가 발생했습니다.");
+  }
+};
   return (
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       <input

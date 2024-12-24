@@ -7,7 +7,7 @@ class KakaoService {
   private readonly BASE_URL: string = 'https://dapi.kakao.com/v2/local';
 
   constructor() {
-    this.API_KEY = process.env.REST_API_KEY || '';
+    this.API_KEY = process.env.KAKAO_REST_API_KEY || '';
   }
 
   private async request<T>(endpoint: string, params: object): Promise<AxiosResponse<T>> {
