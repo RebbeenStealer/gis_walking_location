@@ -1,0 +1,1 @@
+# gis_walking_location
