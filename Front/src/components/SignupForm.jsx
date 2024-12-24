@@ -86,10 +86,10 @@ const handleSubmit = async (e) => {
 
   try {
     const response = await axios.post('http://localhost:8080/user/signup', formData);
-    console.log("서버 응답:", response.data);
+    // console.log("서버 응답:", response.data);
     alert("회원가입이 완료되었습니다!");
   } catch (error) {
-    console.error("회원가입 오류:", error);
+    // console.error("회원가입 오류:", error);
     alert("회원가입 중 오류가 발생했습니다.");
   }
 };
