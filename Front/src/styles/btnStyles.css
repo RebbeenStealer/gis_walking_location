@@ -1,0 +1,5 @@
+.hamburger-menu-btn, .close-menu-btn {
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.5em;
+}
