@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import LoginButton from "./LoginButton";
+import Login from "./LoginButton";
 import SignupForm from "./SignupForm";
 
-const AuthModal = ({ isOpen, onClose }) => {
-  const [isSignup, setIsSignup] = useState(false); // 로그인/회원가입 모드 전환
+const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
+  const [isSignup, setIsSignup] = useState(false);
 
   if (!isOpen) return null;
 
@@ -32,7 +32,11 @@ const AuthModal = ({ isOpen, onClose }) => {
         }}
       >
         <h2>{isSignup ? "회원가입" : "로그인"}</h2>
-        {isSignup ? <SignupForm /> : <LoginButton />}
+        {isSignup ? (
+          <SignupForm onClose={onClose} />
+        ) : (
+          <Login onClose={onClose} onLoginSuccess={onLoginSuccess} />
+        )}
         <button
           onClick={() => setIsSignup(!isSignup)}
           style={{

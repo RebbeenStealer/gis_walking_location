@@ -11,7 +11,10 @@ const createUser = async (userData: any) => {
     const newUser = await userDao.createUser({
       ...userData,
       password: hashedPassword,
+      phone_number: userData.phonenumber
     });
+
+    console.log(newUser)
 
     const { password, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
@@ -45,7 +48,18 @@ const loginUser = async (userId: string, password: string) => {
   }
 };
 
+const createPost = async (userId: number, content: string, imageUrl: string) => {
+  try {
+    const newPost = await userDao.createPost(userId, content, imageUrl);
+    return newPost;
+  } catch (error) {
+    console.error("게시물 생성 중 오류:", error);
+    throw new Error("게시물 생성 중 오류 발생");
+  }
+};
+
 export default {
   createUser,
   loginUser,
+  createPost,
 };

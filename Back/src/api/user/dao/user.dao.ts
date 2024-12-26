@@ -9,6 +9,16 @@ interface IUser {
   phone_number: string;
 }
 
+interface IPost {
+    post_id: number;
+    user_id: number;
+    content: string;
+    image_url: string;
+    likes_count: number;
+    created_at: Date;
+    updated_at: Date;
+  }
+
 const createUser = async (userData: IUser): Promise<IUser> => {
     const query = `
         INSERT INTO ${schema}."user" (id, password, username, phone_number)
@@ -40,8 +50,26 @@ const getUserById = async (userId: string) => {
         throw new Error('데이터베이스 조회 오류');
     }
 };
+  
+  const createPost = async (userId: number, content: string, imageUrl: string): Promise<IPost> => {
+      const query = `
+          INSERT INTO ${schema}."post" (user_id, content, image_url)
+          VALUES ($1, $2, $3)
+          RETURNING post_id, user_id, content, image_url, likes_count, created_at, updated_at
+      `;
+      try {
+          const values = [userId, content, imageUrl];
+          const result: QueryResult = await db.query(query, values);
+          return result.rows[0] as IPost;
+      } catch (error) {
+          console.error('Error Dao createPost: ', error);
+          const errorMessage = (error as Error).message;
+          throw new Error(errorMessage);
+      }
+  };
 
 export default {
     createUser,
-    getUserById
+    getUserById,
+    createPost
 };

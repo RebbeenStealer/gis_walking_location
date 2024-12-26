@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Login = () => {
-  const [formData, setFormData] = useState({ id: "", password: "" }); // 'username'을 'id'로 변경
+const Login = ({ onClose, onLoginSuccess }) => {
+  const [formData, setFormData] = useState({ id: "", password: "" });
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -25,24 +25,26 @@ const Login = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // console.log("로그인 요청 데이터:", formData);
-
+  
     try {
       const response = await axios.post("http://localhost:8080/user/login", formData);
       
+      console.log("서버 응답:", response.data);
+      
       alert("로그인 성공!");
       
-      // JWT 토큰을 로컬 스토리지에 저장
-      localStorage.setItem("token", response.data.token);
+      const { user } = response.data;
+      
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("userInfo", JSON.stringify(user.user));
   
-      // 필요한 경우 사용자 정보를 상태에 저장하거나 다른 작업 수행
-      console.log("사용자 정보:", response.data.user);
-  
+      onLoginSuccess(user);
+      onClose();
     } catch (error) {
       console.error("로그인 오류:", error);
       setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인하세요.");
     }
-  };
+  };  
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
