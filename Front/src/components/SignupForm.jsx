@@ -40,7 +40,7 @@ const SignupForm = () => {
 
         // 아이디 중복 검사
         try {
-          const response = await fetch("https://example.com/api/check-username", {
+          const response = await fetch("나중에 넣을 링크", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: value }),
