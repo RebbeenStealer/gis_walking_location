@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
 html, body, #root {
     margin: 0;
     padding: 0;
@@ -5,14 +12,12 @@ html, body, #root {
     height: 100%;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f5f5f5;
+input {
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-#root {
-    /* max-width: 353px; */
-    /* max-height: 852px; */
+button {
+    border: none;
+    background: none;
 }
